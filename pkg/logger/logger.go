@@ -56,7 +56,10 @@ func (l *Logger) log(level LogLevel, message string) {
 
 	if level >= l.MinLevel {
 		oRaw := fmt.Sprintf("[%s] %s\n", levelName, message)
-		log.Print(oRaw)
+
+		if err := log.Output(4, oRaw); err != nil {
+			panic(err)
+		}
 	}
 }
 

@@ -129,10 +129,10 @@ func main() { //nolint:funlen // flag setup
 	}
 
 	if err := internal.CleanTemp(*opts); err != nil {
-		logger.SharedLogger.Fatalf("Error cleaning temp directory: %v", err)
+		logger.SharedLogger.Warnf("Could not clean temp directory: %v", err)
 	}
 
 	if err := internal.CleanEmpty(*opts); err != nil {
-		logger.SharedLogger.Fatalf("Error cleaning empty directories: %v", err)
+		logger.SharedLogger.Warnf("Could not clean empty directories: %v", err)
 	}
 }
