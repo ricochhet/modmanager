@@ -23,7 +23,7 @@ deadcode:
 	deadcode ./...
 
 syso:
-	windres origin-unwrapper-cli.rc -O coff -o origin-unwrapper-cli.syso
+	windres originunwrapper.rc -O coff -o originunwrapper.syso
 
 origin-unwrapper-linux:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO_BUILD) -o origin-unwrapper-linux ./extras/originunwrapper
