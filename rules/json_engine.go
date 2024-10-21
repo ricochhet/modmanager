@@ -1,24 +1,21 @@
-package internal
+package rules
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 
+	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/simplefs"
 )
 
-type JSONFormats struct {
-	JSON []string `json:"formats"`
-}
-
-func WriteFormats(fileName string, data JSONFormats) error {
-	j, err := json.MarshalIndent(data, "", "  ")
+func WriteEngine(fileName string, data aflag.Engine) error {
+	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return fmt.Errorf("error marshaling JSON: %w", err)
 	}
 
-	err = os.WriteFile(fileName, j, 0o600)
+	err = os.WriteFile(fileName, jsonData, 0o600)
 	if err != nil {
 		return fmt.Errorf("error writing to file: %w", err)
 	}
@@ -26,8 +23,8 @@ func WriteFormats(fileName string, data JSONFormats) error {
 	return nil
 }
 
-func ReadFormats(filePath string) (JSONFormats, error) {
-	var jsonData JSONFormats
+func ReadEngine(filePath string) (aflag.Engine, error) {
+	var jsonData aflag.Engine
 
 	data, err := simplefs.ReadFile(filePath)
 	if err != nil {

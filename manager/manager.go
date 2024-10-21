@@ -1,16 +1,18 @@
-package internal
+package manager
 
 import (
 	"errors"
 	"slices"
 
+	aflag "github.com/ricochhet/modmanager/flag"
+	"github.com/ricochhet/modmanager/rules"
 	"github.com/ricochhet/simplefs"
 )
 
 var errNoFiles = errors.New("no compatible file types in directory")
 
-func Process(opt Options) error { //nolint:cyclop // wontfix
-	files := simplefs.GetFiles(ModPath(opt))
+func Process(opt aflag.Options) error { //nolint:cyclop // wontfix
+	files := simplefs.GetFiles(aflag.ModPath(opt))
 
 	if len(files) == 0 {
 		return errNoFiles
@@ -33,22 +35,22 @@ func Process(opt Options) error { //nolint:cyclop // wontfix
 		}
 	}
 
-	loadOrder, err := ReadLoadOrders(LoadOrderPath(opt))
+	loadOrder, err := rules.ReadLoadOrders(aflag.LoadOrderPath(opt))
 	if err != nil {
 		return err
 	}
 
-	addons, err := ReadAddons(AddonPath(opt))
+	addons, err := rules.ReadAddons(aflag.AddonPath(opt))
 	if err != nil {
 		return err
 	}
 
-	renames, err := ReadRenames(RenamePath(opt))
+	renames, err := rules.ReadRenames(aflag.RenamePath(opt))
 	if err != nil {
 		return err
 	}
 
-	exclusions, err := ReadExclusions(ExclusionPath(opt))
+	exclusions, err := rules.ReadExclusions(aflag.ExclusionPath(opt))
 	if err != nil {
 		return err
 	}

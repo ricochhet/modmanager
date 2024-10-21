@@ -1,4 +1,4 @@
-package internal
+package rules
 
 import (
 	"encoding/json"
@@ -8,7 +8,16 @@ import (
 	"github.com/ricochhet/simplefs"
 )
 
-func WriteEngine(fileName string, data Engine) error {
+type LoadOrder struct {
+	Name  string `json:"name"`
+	Index int    `json:"index"`
+}
+
+type JSONLoadOrder struct {
+	JSON []LoadOrder `json:"loadOrder"`
+}
+
+func WriteLoadOrders(fileName string, data JSONLoadOrder) error {
 	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return fmt.Errorf("error marshaling JSON: %w", err)
@@ -22,8 +31,8 @@ func WriteEngine(fileName string, data Engine) error {
 	return nil
 }
 
-func ReadEngine(filePath string) (Engine, error) {
-	var jsonData Engine
+func ReadLoadOrders(filePath string) (JSONLoadOrder, error) {
+	var jsonData JSONLoadOrder
 
 	data, err := simplefs.ReadFile(filePath)
 	if err != nil {

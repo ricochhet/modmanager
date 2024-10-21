@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/ricochhet/modmanager/internal"
+	"github.com/ricochhet/modmanager/info"
 	"github.com/ricochhet/modmanager/pkg/logger"
 	"github.com/ricochhet/modmanager/pkg/originunwrapper"
 	"github.com/ricochhet/readwrite"
@@ -37,7 +37,7 @@ func main() {
 
 	flag.Parse()
 
-	internal.DrawWatermark(internal.WatermarkText())
+	info.DrawWatermark(info.WatermarkText())
 
 	if *versionFlag {
 		printVersion()

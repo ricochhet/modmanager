@@ -1,4 +1,4 @@
-package internal
+package manager
 
 import (
 	"errors"
@@ -8,16 +8,18 @@ import (
 	"strings"
 
 	"github.com/otiai10/copy"
+	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/pkg/logger"
+	"github.com/ricochhet/modmanager/rules"
 	"github.com/ricochhet/simplefs"
 	"github.com/ricochhet/simpleutil"
 )
 
 var errIndexOutOfRange = errors.New("load order index is out of range")
 
-//nolint:funlen,gocognit,gocyclo,cyclop // wontfix
-func generate(opt Options, loadOrder JSONLoadOrder, addons JSONAddons, renames JSONRenames, exclusions JSONExclusions) error {
-	dirs, err := os.ReadDir(TempPath(opt))
+//nolint:funlen,gocognit,gocyclo,cyclop,lll // wontfix
+func generate(opt aflag.Options, loadOrder rules.JSONLoadOrder, addons rules.JSONAddons, renames rules.JSONRenames, exclusions rules.JSONExclusions) error {
+	dirs, err := os.ReadDir(aflag.TempPath(opt))
 	if err != nil {
 		return err
 	}
@@ -49,9 +51,9 @@ func generate(opt Options, loadOrder JSONLoadOrder, addons JSONAddons, renames J
 	}
 
 	for _, dir := range stringDirs {
-		path := filepath.Join(TempPath(opt), dir)
+		path := filepath.Join(aflag.TempPath(opt), dir)
 		search, item, err := Search((path), game.Engine.Paths)
-		exclusions := Exclude(exclusions, dir, path)
+		exclusions := rules.Exclude(exclusions, dir, path)
 
 		if err != nil {
 			return err
@@ -78,7 +80,7 @@ func generate(opt Options, loadOrder JSONLoadOrder, addons JSONAddons, renames J
 					dll := filepath.Join(path, file.Name())
 
 					if filepath.Base(dll) == hook.Name && hook.Arch == "x64" {
-						dllDest := filepath.Join(OutputPath(opt), filepath.Join(hook.Requires...), hook.Dll)
+						dllDest := filepath.Join(aflag.OutputPath(opt), filepath.Join(hook.Requires...), hook.Dll)
 
 						logger.SharedLogger.Infof("Copying: '%s' to '%s' (%s)", dll, dllDest, dir)
 
@@ -143,15 +145,15 @@ func generate(opt Options, loadOrder JSONLoadOrder, addons JSONAddons, renames J
 	return postCopyAddons(opt, addons)
 }
 
-func dest(opt Options, item Data) string {
+func dest(opt aflag.Options, item aflag.Data) string {
 	if len(item.Requires) == 0 {
-		return filepath.Join(OutputPath(opt), item.Path)
+		return filepath.Join(aflag.OutputPath(opt), item.Path)
 	}
 
-	return filepath.Join(OutputPath(opt), filepath.Join(item.Requires...))
+	return filepath.Join(aflag.OutputPath(opt), filepath.Join(item.Requires...))
 }
 
-func sortLoadOrder(loadOrder JSONLoadOrder, dirs []string) ([]string, error) {
+func sortLoadOrder(loadOrder rules.JSONLoadOrder, dirs []string) ([]string, error) {
 	for _, order := range loadOrder.JSON {
 		ind := order.Index
 
@@ -169,11 +171,11 @@ func sortLoadOrder(loadOrder JSONLoadOrder, dirs []string) ([]string, error) {
 	return dirs, nil
 }
 
-func copyAddons(opt Options, addons JSONAddons, renames JSONRenames, dir, path string) error {
+func copyAddons(opt aflag.Options, addons rules.JSONAddons, renames rules.JSONRenames, dir, path string) error {
 	for _, addon := range addons.JSON {
 		if addon.Name == dir {
 			addonSrc := filepath.Join(path, addon.Source)
-			addonDest := filepath.Join(OutputPath(opt), addon.Destination)
+			addonDest := filepath.Join(aflag.OutputPath(opt), addon.Destination)
 
 			logger.SharedLogger.Infof("Copying: '%s' to '%s' (%s)", addonSrc, addonDest, dir)
 
@@ -196,11 +198,11 @@ func copyAddons(opt Options, addons JSONAddons, renames JSONRenames, dir, path s
 	return nil
 }
 
-func postCopyAddons(opt Options, addons JSONAddons) error {
+func postCopyAddons(opt aflag.Options, addons rules.JSONAddons) error {
 	for _, addon := range addons.JSON {
 		if addon.Name == "copy" {
-			addonSrc := filepath.Join(ModPath(opt), addon.Source)
-			addonDest := filepath.Join(OutputPath(opt), addon.Destination)
+			addonSrc := filepath.Join(aflag.ModPath(opt), addon.Source)
+			addonDest := filepath.Join(aflag.OutputPath(opt), addon.Destination)
 
 			logger.SharedLogger.Infof("Copying: '%s' to '%s' (copy)", addonSrc, addonDest)
 

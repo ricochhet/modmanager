@@ -1,4 +1,4 @@
-package internal
+package manager
 
 import (
 	"os"
@@ -6,12 +6,13 @@ import (
 	"slices"
 	"strings"
 
+	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/pkg/logger"
 	"github.com/ricochhet/simplefs"
 )
 
 //nolint:cyclop // wontfix
-func Search(filePath string, items []Data) (string, Data, error) {
+func Search(filePath string, items []aflag.Data) (string, aflag.Data, error) {
 	dirs := simplefs.GetDirectories(filePath)
 
 	for _, dir := range dirs {
@@ -27,7 +28,7 @@ func Search(filePath string, items []Data) (string, Data, error) {
 
 	files, err := os.ReadDir(filePath)
 	if err != nil {
-		return "", Data{}, err
+		return "", aflag.Data{}, err
 	}
 
 	for _, file := range files {
@@ -45,5 +46,5 @@ func Search(filePath string, items []Data) (string, Data, error) {
 		}
 	}
 
-	return "", Data{}, nil //nolint:exhaustruct // wontfix
+	return "", aflag.Data{}, nil //nolint:exhaustruct // wontfix
 }

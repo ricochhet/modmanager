@@ -1,4 +1,4 @@
-package internal
+package info
 
 func WatermarkText() []string {
 	return []string{
