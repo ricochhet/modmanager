@@ -1,0 +1,62 @@
+{
+  "paths": [
+    {
+      "path": "nativePC",
+      "isDir": true,
+      "requires": [],
+      "unsupported": false
+    },
+    {
+      "path": "NativePC",
+      "isDir": true,
+      "requires": [],
+      "unsupported": false
+    },
+    {
+      "path": "Nativepc",
+      "isDir": true,
+      "requires": [],
+      "unsupported": false
+    },
+    {
+      "path": "nativepc",
+      "isDir": true,
+      "requires": [],
+      "unsupported": false
+    },
+    {
+      "path": "vfx",
+      "isDir": true,
+      "requires": [
+        "nativePC",
+        "vfx"
+      ],
+      "unsupported": false
+    },
+    {
+      "path": "pl",
+      "isDir": true,
+      "requires": [
+        "nativePC",
+        "pl"
+      ],
+      "unsupported": false
+    }
+  ],
+  "hooks": [
+    {
+      "name": "dinput8.dll",
+      "dll": "dinput8.dll",
+      "arch": "x64",
+      "requires": [],
+      "include": []
+    },
+    {
+      "name": "loader.dll",
+      "dll": "loader.dll",
+      "arch": "x64",
+      "requires": [],
+      "include": []
+    }
+  ]
+}

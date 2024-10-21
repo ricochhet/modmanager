@@ -1,0 +1,72 @@
+{
+  "paths": [
+    {
+      "path": "natives",
+      "isDir": true,
+      "requires": [],
+      "unsupported": false
+    },
+    {
+      "path": "reframework",
+      "isDir": true,
+      "requires": [],
+      "unsupported": false
+    },
+    {
+      "path": "autorun",
+      "isDir": true,
+      "requires": [
+        "reframework",
+        "autorun"
+      ],
+      "unsupported": false
+    },
+    {
+      "path": ".lua",
+      "isDir": false,
+      "requires": [
+        "reframework",
+        "autorun"
+      ],
+      "unsupported": false
+    },
+    {
+      "path": ".dll",
+      "isDir": false,
+      "requires": [
+        "reframework",
+        "plugins"
+      ],
+      "unsupported": false
+    },
+    {
+      "path": ".pak",
+      "isDir": false,
+      "requires": [],
+      "unsupported": true
+    }
+  ],
+  "hooks": [
+    {
+      "name": "dinput8.dll",
+      "dll": "dinput8.dll",
+      "arch": "x64",
+      "requires": [],
+      "include": []
+    },
+    {
+      "name": "SpecialK64.dll",
+      "dll": "dxgi.dll",
+      "arch": "x64",
+      "requires": [],
+      "include": []
+    },
+    {
+      "name": "SpecialK32.dll",
+      "dll": "dxgi.dll",
+      "arch": "x86",
+      "requires": [],
+      "include": []
+    }
+  ]
+}
