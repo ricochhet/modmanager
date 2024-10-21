@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"github.com/otiai10/copy"
+	"github.com/ricochhet/minicommon/filesystem"
+	"github.com/ricochhet/minicommon/util"
 	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/pkg/logger"
 	"github.com/ricochhet/modmanager/rules"
-	"github.com/ricochhet/simplefs"
-	"github.com/ricochhet/simpleutil"
 )
 
 var errIndexOutOfRange = errors.New("load order index is out of range")
@@ -75,7 +75,7 @@ func generate(opt aflag.Options, loadOrder rules.JSONLoadOrder, addons rules.JSO
 				skip = false
 			}
 
-			if !file.IsDir() && simplefs.GetFileExtension(file.Name()) == opt.Hook {
+			if !file.IsDir() && filesystem.GetFileExtension(file.Name()) == opt.Hook {
 				for _, hook := range game.Engine.Hooks {
 					dll := filepath.Join(path, file.Name())
 
@@ -84,7 +84,7 @@ func generate(opt aflag.Options, loadOrder rules.JSONLoadOrder, addons rules.JSO
 
 						logger.SharedLogger.Infof("Copying: '%s' to '%s' (%s)", dll, dllDest, dir)
 
-						if err := simplefs.Copy(dll, dllDest, copy.Options{ //nolint:exhaustruct // wontfix
+						if err := filesystem.Copy(dll, dllDest, copy.Options{ //nolint:exhaustruct // wontfix
 							Skip: func(_ os.FileInfo, src, _ string) (bool, error) {
 								if slices.Contains(exclusions, src) {
 									logger.SharedLogger.Infof("Skipping: %s", src)
@@ -112,7 +112,7 @@ func generate(opt aflag.Options, loadOrder rules.JSONLoadOrder, addons rules.JSO
 
 		logger.SharedLogger.Infof("Copying: '%s' to '%s' (%s)", search, dest, dir)
 
-		if err := simplefs.Copy(search, dest, copy.Options{ //nolint:exhaustruct // wontfix
+		if err := filesystem.Copy(search, dest, copy.Options{ //nolint:exhaustruct // wontfix
 			RenameDestination: func(_, dest string) (string, error) {
 				for _, rename := range renames.JSON {
 					if rename.Name == dir {
@@ -165,7 +165,7 @@ func sortLoadOrder(loadOrder rules.JSONLoadOrder, dirs []string) ([]string, erro
 			ind = len(dirs)
 		}
 
-		dirs = simpleutil.MoveEntry(dirs, order.Name, ind)
+		dirs = util.MoveEntry(dirs, order.Name, ind)
 	}
 
 	return dirs, nil
@@ -179,7 +179,7 @@ func copyAddons(opt aflag.Options, addons rules.JSONAddons, renames rules.JSONRe
 
 			logger.SharedLogger.Infof("Copying: '%s' to '%s' (%s)", addonSrc, addonDest, dir)
 
-			if err := simplefs.Copy(addonSrc, addonDest, copy.Options{ //nolint:exhaustruct // wontfix
+			if err := filesystem.Copy(addonSrc, addonDest, copy.Options{ //nolint:exhaustruct // wontfix
 				RenameDestination: func(_, dest string) (string, error) {
 					for _, rename := range renames.JSON {
 						if rename.Name == dir {
@@ -206,7 +206,7 @@ func postCopyAddons(opt aflag.Options, addons rules.JSONAddons) error {
 
 			logger.SharedLogger.Infof("Copying: '%s' to '%s' (copy)", addonSrc, addonDest)
 
-			if err := simplefs.Copy(addonSrc, addonDest); err != nil {
+			if err := filesystem.Copy(addonSrc, addonDest); err != nil {
 				return err
 			}
 		}

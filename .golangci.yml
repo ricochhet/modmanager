@@ -34,13 +34,7 @@ linters-settings:
                     - $gostd
                     - github.com/otiai10/copy
                     - github.com/ricochhet/modmanager
-                    - github.com/ricochhet/sevenzip
-                    - github.com/ricochhet/simplefs
-                    - github.com/ricochhet/simplelog
-                    - github.com/ricochhet/simplecrypto
-                    - github.com/ricochhet/simpleutil
-                    - github.com/ricochhet/readwrite
-                    - github.com/ricochhet/murmurhash3
+                    - github.com/ricochhet/minicommon
 issues:
     exclude-dirs:
         - thirdparty/

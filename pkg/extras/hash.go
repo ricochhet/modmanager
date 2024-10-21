@@ -12,8 +12,8 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/ricochhet/minicommon/crypto"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/simplecrypto"
 )
 
 var errSeedToInt = errors.New("error converting seed to integer")
@@ -40,11 +40,11 @@ func NewHash(args []string) error {
 
 	switch hashType {
 	case "murmur3x64_128hash":
-		logger.SharedLogger.Infof("%d", simplecrypto.Murmur3X64_128Hash(seed, args[0]))
+		logger.SharedLogger.Infof("%d", crypto.Murmur3X64_128Hash(seed, args[0]))
 	case "murmur3x86_128hash":
-		logger.SharedLogger.Infof("%d", simplecrypto.Murmur3X86_128Hash(seed, args[0]))
+		logger.SharedLogger.Infof("%d", crypto.Murmur3X86_128Hash(seed, args[0]))
 	case "murmur3x86_32hash":
-		logger.SharedLogger.Infof("%d", simplecrypto.Murmur3X86_32Hash(seed, args[0]))
+		logger.SharedLogger.Infof("%d", crypto.Murmur3X86_32Hash(seed, args[0]))
 	case "crc64":
 		if err := newHash(args[0], crc64.New(crc64.MakeTable(crc32.IEEE))); err != nil {
 			return err
@@ -79,7 +79,7 @@ func NewHash(args []string) error {
 }
 
 func newHash(filePath string, hash hash.Hash) error {
-	s, err := simplecrypto.NewHash(filePath, hash)
+	s, err := crypto.NewHash(filePath, hash)
 	if err != nil {
 		return err
 	}

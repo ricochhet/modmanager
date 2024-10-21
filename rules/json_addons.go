@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ricochhet/simplefs"
+	"github.com/ricochhet/minicommon/filesystem"
 )
 
 type Addon struct {
@@ -35,7 +35,7 @@ func WriteAddons(fileName string, data JSONAddons) error {
 func ReadAddons(filePath string) (JSONAddons, error) {
 	var jsonData JSONAddons
 
-	data, err := simplefs.ReadFile(filePath)
+	data, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		return jsonData, fmt.Errorf("error reading file: %w", err)
 	}

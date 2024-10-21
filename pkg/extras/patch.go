@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ricochhet/minicommon/filesystem"
+	"github.com/ricochhet/minicommon/util"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/simplefs"
-	"github.com/ricochhet/simpleutil"
 )
 
 var (
@@ -22,7 +22,7 @@ func NewPatch(args []string) error {
 		return errSpecifyPathAndBytes
 	}
 
-	if simplefs.Exists(args[0]) && simplefs.Exists(args[1]) {
+	if filesystem.Exists(args[0]) && filesystem.Exists(args[1]) {
 		data, err := ReadPatchTable(args[1])
 		if err != nil {
 			return err
@@ -38,7 +38,7 @@ func NewPatch(args []string) error {
 		return nil
 	}
 
-	if err := simpleutil.CheckArgumentCount(args, 4); err != nil {
+	if err := util.CheckArgumentCount(args, 4); err != nil {
 		return err
 	}
 
@@ -51,25 +51,25 @@ func NewPatch(args []string) error {
 
 //nolint:cyclop // wontfix
 func findAndReplaceBytes(fileName, searchBytes, replacementBytes, position string) error {
-	findBytes, err := simpleutil.HexStringToBytes(searchBytes)
+	findBytes, err := util.HexStringToBytes(searchBytes)
 	if err != nil {
 		return err
 	}
 
 	var replaceWith []byte
 	if replacementBytes != "" {
-		replaceWith, err = simpleutil.HexStringToBytes(replacementBytes)
+		replaceWith, err = util.HexStringToBytes(replacementBytes)
 		if err != nil {
 			return err
 		}
 	}
 
-	content, err := simplefs.ReadFile(fileName)
+	content, err := filesystem.ReadFile(fileName)
 	if err != nil {
 		return err
 	}
 
-	indices := simpleutil.FindAllByteOccurrences(content, findBytes)
+	indices := util.FindAllByteOccurrences(content, findBytes)
 	if len(indices) == 0 {
 		logger.SharedLogger.Info("No occurrences found.")
 		return nil
@@ -93,9 +93,9 @@ func findAndReplaceBytes(fileName, searchBytes, replacementBytes, position strin
 			newPosition = s
 		}
 
-		modifiedContent := simpleutil.ReplaceByteOccurrences(content, findBytes, replaceWith, newPosition)
+		modifiedContent := util.ReplaceByteOccurrences(content, findBytes, replaceWith, newPosition)
 
-		if err := simplefs.WriteFile(fileName, modifiedContent, os.ModePerm); err != nil {
+		if err := filesystem.WriteFile(fileName, modifiedContent, os.ModePerm); err != nil {
 			return err
 		}
 

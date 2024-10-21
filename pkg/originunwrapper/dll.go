@@ -6,8 +6,8 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/ricochhet/readwrite"
-	"github.com/ricochhet/simpleutil"
+	"github.com/ricochhet/minicommon/readwrite"
+	"github.com/ricochhet/minicommon/util"
 )
 
 type DLLEntry struct {
@@ -57,7 +57,7 @@ func patchImportTable(file *readwrite.Data, address int, dllsToAdd []DLLEntry, a
 
 	for _, entry := range dllsToAdd {
 		addresses = append(addresses, []int{address})
-		nameBytes := simpleutil.StringToBytes(entry.DLL)
+		nameBytes := util.StringToBytes(entry.DLL)
 		result = append(result, nameBytes...)
 		address += len(nameBytes)
 	}
@@ -69,7 +69,7 @@ func patchImportTable(file *readwrite.Data, address int, dllsToAdd []DLLEntry, a
 
 		for _, name := range names.Names {
 			nameAddresses = append(nameAddresses, address)
-			nameBytes := simpleutil.StringToBytes(name)
+			nameBytes := util.StringToBytes(name)
 
 			result = append(result, 0x00, 0x00) //nolint:mnd // wontfix
 			result = append(result, nameBytes...)

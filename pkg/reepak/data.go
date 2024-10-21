@@ -1,9 +1,9 @@
 package reepak
 
 import (
+	"github.com/ricochhet/minicommon/filesystem"
+	"github.com/ricochhet/minicommon/readwrite"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/readwrite"
-	"github.com/ricochhet/simplefs"
 )
 
 func CompressPakData(path string) error {
@@ -39,7 +39,7 @@ func CompressPakData(path string) error {
 		return err
 	}
 
-	if err := simplefs.DeleteDirectory(simplefs.GetRelativePath(path + ".data")); err != nil {
+	if err := filesystem.DeleteDirectory(filesystem.GetRelativePath(path + ".data")); err != nil {
 		return err
 	}
 

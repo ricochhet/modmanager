@@ -6,14 +6,14 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/ricochhet/minicommon/filesystem"
 	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/simplefs"
 )
 
 //nolint:cyclop // wontfix
 func Search(filePath string, items []aflag.Data) (string, aflag.Data, error) {
-	dirs := simplefs.GetDirectories(filePath)
+	dirs := filesystem.GetDirectories(filePath)
 
 	for _, dir := range dirs {
 		for _, item := range items {
@@ -34,7 +34,7 @@ func Search(filePath string, items []aflag.Data) (string, aflag.Data, error) {
 	for _, file := range files {
 		for _, item := range items {
 			path := filepath.Join(filePath, file.Name())
-			ext := simplefs.GetFileExtension(path)
+			ext := filesystem.GetFileExtension(path)
 
 			if !item.IsDir && !file.IsDir() && ext == item.Path && item.Unsupported {
 				logger.SharedLogger.Warnf("Unsupported file type: %s, %s", ext, path)

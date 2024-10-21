@@ -6,11 +6,11 @@ import (
 	"log"
 	"os"
 
+	"github.com/ricochhet/minicommon/filesystem"
 	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/info"
 	"github.com/ricochhet/modmanager/manager"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/simplefs"
 )
 
 var (
@@ -49,7 +49,7 @@ func main() {
 		}
 	}()
 
-	configData, err := simplefs.ReadAllLines(configfile)
+	configData, err := filesystem.ReadAllLines(configfile)
 	if err != nil {
 		logger.SharedLogger.Fatalf("Error reading config file: %v", err)
 	}

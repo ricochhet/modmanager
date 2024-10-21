@@ -7,15 +7,15 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/ricochhet/readwrite"
-	"github.com/ricochhet/simpleutil"
+	"github.com/ricochhet/minicommon/readwrite"
+	"github.com/ricochhet/minicommon/util"
 )
 
 var errUnkNotZero = errors.New("error: unk != 1")
 
 //nolint:funlen,gocognit,gocyclo,cyclop // wontfix
 func Parse(data []byte) (readwrite.Section, error) {
-	contentID := simpleutil.GetStringFromBytes(data, 0x42, 0x240) //nolint:mnd // wontfix
+	contentID := util.GetStringFromBytes(data, 0x42, 0x240) //nolint:mnd // wontfix
 	reader := bytes.NewReader(data)
 
 	if _, err := reader.Seek(0x242, io.SeekStart); err != nil { //nolint:mnd // wontfix

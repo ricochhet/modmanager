@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ricochhet/simplefs"
+	"github.com/ricochhet/minicommon/filesystem"
 )
 
 type Patch struct {
@@ -35,7 +35,7 @@ func WritePatchTable(fileName string, data PatchTable) error {
 func ReadPatchTable(fileName string) (PatchTable, error) {
 	var table PatchTable
 
-	jsonData, err := simplefs.ReadFile(fileName)
+	jsonData, err := filesystem.ReadFile(fileName)
 	if err != nil {
 		return table, fmt.Errorf("error reading file: %w", err)
 	}

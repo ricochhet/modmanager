@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ricochhet/simplefs"
+	"github.com/ricochhet/minicommon/filesystem"
 )
 
 type JSONFormats struct {
@@ -29,7 +29,7 @@ func WriteFormats(fileName string, data JSONFormats) error {
 func ReadFormats(filePath string) (JSONFormats, error) {
 	var jsonData JSONFormats
 
-	data, err := simplefs.ReadFile(filePath)
+	data, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		return jsonData, fmt.Errorf("error reading file: %w", err)
 	}

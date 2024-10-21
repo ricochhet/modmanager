@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ricochhet/minicommon/crypto"
+	"github.com/ricochhet/minicommon/readwrite"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/readwrite"
-	"github.com/ricochhet/simplecrypto"
 )
 
 //nolint:funlen,gocognit,gocyclo,cyclop // wontfix
@@ -23,7 +23,7 @@ func Unwrap(fileMap *readwrite.Data, versionPtr, getDlfKey, dlfKeyPtr, outputPat
 	}
 
 	section := fileMap.Bytes[sectionHeader.Offset : sectionHeader.Offset+sectionHeader.Size]
-	hash := simplecrypto.GetOoaHash(section)
+	hash := crypto.GetOoaHash(section)
 
 	versionHash := sha1.New() //nolint:gosec // wontfix
 	versionHash.Write([]byte(versionPtr))
@@ -60,13 +60,13 @@ func Unwrap(fileMap *readwrite.Data, versionPtr, getDlfKey, dlfKeyPtr, outputPat
 		if len(os.Args) > 2 { //nolint:mnd // wontfix
 			data, err := os.ReadFile(getDlfKey)
 			if err == nil {
-				dlf, err = simplecrypto.DecryptDLF(data)
+				dlf, err = crypto.DecryptDLF(data)
 				if err != nil {
 					logger.SharedLogger.Fatal("Error: DecryptDLF()")
 				}
 			}
 		} else {
-			dlf, err = simplecrypto.GetDLFAuto(getDlfKey + sectionData.ContentID)
+			dlf, err = crypto.GetDLFAuto(getDlfKey + sectionData.ContentID)
 			if err != nil {
 				logger.SharedLogger.Fatal("Error: GetDLFAuto()")
 			}
@@ -77,7 +77,7 @@ func Unwrap(fileMap *readwrite.Data, versionPtr, getDlfKey, dlfKeyPtr, outputPat
 		}
 
 		fmt.Printf("DLF: %s\n", string(dlf))
-		dlfKey, err := simplecrypto.DecodeCipherTag(dlf)
+		dlfKey, err := crypto.DecodeCipherTag(dlf)
 
 		if dlfKey == nil {
 			logger.SharedLogger.Fatal("Error: failed to get CipherKey from DLF!")
@@ -111,7 +111,7 @@ func Unwrap(fileMap *readwrite.Data, versionPtr, getDlfKey, dlfKeyPtr, outputPat
 		iv := make([]byte, 16) //nolint:mnd // wontfix
 		copy(iv, newBytes[decryptHeader.Offset-0x10:decryptHeader.Offset])
 
-		err := simplecrypto.AESDecryptBase64(dlfKeyPtr, iv, newBytes[decryptHeader.Offset:decryptHeader.Offset+decryptHeader.Size])
+		err := crypto.AESDecryptBase64(dlfKeyPtr, iv, newBytes[decryptHeader.Offset:decryptHeader.Offset+decryptHeader.Size])
 		if err != nil {
 			panic(fmt.Errorf("(panic)Error: %w", err))
 		}

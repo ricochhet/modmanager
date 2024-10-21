@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ricochhet/simplefs"
+	"github.com/ricochhet/minicommon/filesystem"
 )
 
 type Exclusion struct {
@@ -35,7 +35,7 @@ func WriteExclusions(fileName string, data JSONExclusions) error {
 func ReadExclusions(filePath string) (JSONExclusions, error) {
 	var jsonData JSONExclusions
 
-	data, err := simplefs.ReadFile(filePath)
+	data, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		return jsonData, fmt.Errorf("error reading file: %w", err)
 	}
@@ -52,16 +52,16 @@ func Exclude(exclusions JSONExclusions, entry, path string) []string {
 
 	for _, exclusion := range exclusions.JSON {
 		if entry == exclusion.Name { //nolint:nestif // wontfix
-			if simplefs.GetFileExtension(exclusion.Path) == "" { // directory
+			if filesystem.GetFileExtension(exclusion.Path) == "" { // directory
 				dir := filepath.Join(path, exclusion.Path)
 
-				if simplefs.Exists(dir) {
-					files = append(files, simplefs.GetFiles(dir)...)
+				if filesystem.Exists(dir) {
+					files = append(files, filesystem.GetFiles(dir)...)
 				}
 			} else {
 				file := filepath.Join(path, exclusion.Path)
 
-				if simplefs.Exists(file) {
+				if filesystem.Exists(file) {
 					files = append(files, file)
 				}
 			}

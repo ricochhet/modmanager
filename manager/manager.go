@@ -4,15 +4,15 @@ import (
 	"errors"
 	"slices"
 
+	"github.com/ricochhet/minicommon/filesystem"
 	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/rules"
-	"github.com/ricochhet/simplefs"
 )
 
 var errNoFiles = errors.New("no compatible file types in directory")
 
 func Process(opt aflag.Options) error { //nolint:cyclop // wontfix
-	files := simplefs.GetFiles(aflag.ModPath(opt))
+	files := filesystem.GetFiles(aflag.ModPath(opt))
 
 	if len(files) == 0 {
 		return errNoFiles
@@ -28,7 +28,7 @@ func Process(opt aflag.Options) error { //nolint:cyclop // wontfix
 	}
 
 	for _, file := range files {
-		if slices.Contains(formats, simplefs.GetFileExtension(file)) {
+		if slices.Contains(formats, filesystem.GetFileExtension(file)) {
 			if err := extract(file, opt); err != nil {
 				return err
 			}

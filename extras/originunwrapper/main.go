@@ -5,10 +5,10 @@ import (
 	"log"
 	"os"
 
+	"github.com/ricochhet/minicommon/readwrite"
 	"github.com/ricochhet/modmanager/info"
 	"github.com/ricochhet/modmanager/pkg/logger"
 	"github.com/ricochhet/modmanager/pkg/originunwrapper"
-	"github.com/ricochhet/readwrite"
 )
 
 var (

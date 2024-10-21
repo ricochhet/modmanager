@@ -1,8 +1,6 @@
 package reepak
 
-import (
-	"github.com/ricochhet/readwrite"
-)
+import "github.com/ricochhet/minicommon/readwrite"
 
 func WriteData(writer *readwrite.Writer, data []readwrite.DataEntry) error {
 	startPos, _ := writer.Position()

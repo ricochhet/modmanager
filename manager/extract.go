@@ -1,13 +1,13 @@
 package manager
 
 import (
+	"github.com/ricochhet/minicommon/filesystem"
+	"github.com/ricochhet/minicommon/sevenzip"
 	aflag "github.com/ricochhet/modmanager/flag"
-	"github.com/ricochhet/sevenzip"
-	"github.com/ricochhet/simplefs"
 )
 
 func extract(file string, opt aflag.Options) error {
-	if simplefs.Exists(opt.Bin) {
+	if filesystem.Exists(opt.Bin) {
 		if _, err := sevenzip.SzBinExtract(file, aflag.TempPath(opt), opt.Bin, opt.Silent); err != nil {
 			return err
 		}

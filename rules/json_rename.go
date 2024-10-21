@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ricochhet/simplefs"
+	"github.com/ricochhet/minicommon/filesystem"
 )
 
 type Rename struct {
@@ -35,7 +35,7 @@ func WriteRenames(fileName string, data JSONRenames) error {
 func ReadRenames(filePath string) (JSONRenames, error) {
 	var jsonData JSONRenames
 
-	data, err := simplefs.ReadFile(filePath)
+	data, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		return jsonData, fmt.Errorf("error reading file: %w", err)
 	}

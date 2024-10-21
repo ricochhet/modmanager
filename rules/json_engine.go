@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ricochhet/minicommon/filesystem"
 	aflag "github.com/ricochhet/modmanager/flag"
-	"github.com/ricochhet/simplefs"
 )
 
 func WriteEngine(fileName string, data aflag.Engine) error {
@@ -26,7 +26,7 @@ func WriteEngine(fileName string, data aflag.Engine) error {
 func ReadEngine(filePath string) (aflag.Engine, error) {
 	var jsonData aflag.Engine
 
-	data, err := simplefs.ReadFile(filePath)
+	data, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		return jsonData, fmt.Errorf("error reading file: %w", err)
 	}

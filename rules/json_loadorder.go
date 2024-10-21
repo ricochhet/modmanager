@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ricochhet/simplefs"
+	"github.com/ricochhet/minicommon/filesystem"
 )
 
 type LoadOrder struct {
@@ -34,7 +34,7 @@ func WriteLoadOrders(fileName string, data JSONLoadOrder) error {
 func ReadLoadOrders(filePath string) (JSONLoadOrder, error) {
 	var jsonData JSONLoadOrder
 
-	data, err := simplefs.ReadFile(filePath)
+	data, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		return jsonData, fmt.Errorf("error reading file: %w", err)
 	}

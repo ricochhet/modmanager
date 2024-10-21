@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/ricochhet/minicommon/filesystem"
 	aflag "github.com/ricochhet/modmanager/flag"
 	"github.com/ricochhet/modmanager/rules"
-	"github.com/ricochhet/simplefs"
 )
 
 var errNoGameDataFound = errors.New("no game data found")
@@ -15,7 +15,7 @@ var errNoGameDataFound = errors.New("no game data found")
 func FindGames(opt aflag.Options) ([]aflag.Game, error) {
 	games := []aflag.Game{}
 
-	path := simplefs.GetRelativePath(filepath.Join(opt.Data, aflag.RequiredData))
+	path := filesystem.GetRelativePath(filepath.Join(opt.Data, aflag.RequiredData))
 
 	dirs, err := os.ReadDir(path)
 	if err != nil {
@@ -29,7 +29,7 @@ func FindGames(opt aflag.Options) ([]aflag.Game, error) {
 	for _, dir := range dirs {
 		data := filepath.Join(path, dir.Name(), opt.Engine)
 
-		if simplefs.Exists(data) {
+		if filesystem.Exists(data) {
 			engine, err := rules.ReadEngine(data)
 			if err != nil {
 				return nil, err
@@ -45,7 +45,7 @@ func FindGames(opt aflag.Options) ([]aflag.Game, error) {
 func FindFormats(opt aflag.Options) ([]string, error) {
 	formats := []string{}
 
-	path := simplefs.GetRelativePath(filepath.Join(opt.Data, aflag.RequiredData))
+	path := filesystem.GetRelativePath(filepath.Join(opt.Data, aflag.RequiredData))
 
 	dirs, err := os.ReadDir(path)
 	if err != nil {
@@ -60,7 +60,7 @@ func FindFormats(opt aflag.Options) ([]string, error) {
 		if dir.IsDir() && opt.Game == dir.Name() {
 			data := filepath.Join(path, dir.Name(), opt.Formats)
 
-			if simplefs.Exists(data) {
+			if filesystem.Exists(data) {
 				format, err := rules.ReadFormats(data)
 				if err != nil {
 					return nil, err

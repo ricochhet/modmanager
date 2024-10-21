@@ -9,10 +9,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ricochhet/minicommon/filesystem"
+	"github.com/ricochhet/minicommon/murmurhash3"
+	"github.com/ricochhet/minicommon/readwrite"
 	"github.com/ricochhet/modmanager/pkg/logger"
-	"github.com/ricochhet/murmurhash3"
-	"github.com/ricochhet/readwrite"
-	"github.com/ricochhet/simplefs"
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 //nolint:funlen,gocognit,gocyclo,cyclop // wontfix
 func ProcessDirectory(source, outputFile string, embed bool) error {
 	directory, _ := filepath.Abs(source)
-	sortedFiles := simplefs.GetFiles(filepath.Join(directory, "natives"))
+	sortedFiles := filesystem.GetFiles(filepath.Join(directory, "natives"))
 	writer, err := readwrite.NewWriter(outputFile, false)
 
 	data := []readwrite.DataEntry{}
