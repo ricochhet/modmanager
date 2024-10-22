@@ -355,8 +355,8 @@ MigrationBackup/
 *.exe
 *.syso
 
-patches/
-# !patches/*.7z
+patches/*
+!patches/*.xdelta
 
 data/*
 data/modmanager/*.txt
